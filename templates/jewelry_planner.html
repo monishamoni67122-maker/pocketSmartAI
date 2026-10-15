@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Jewelry Budget Planner — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-card">
+    <h2>💍 Jewelry Budget Planner</h2>
+    <p class="subtitle">Get style-matched jewelry suggestions — optionally upload an outfit photo</p>
+
+    <form method="post" action="/generate-jewelry" enctype="multipart/form-data" onsubmit="showLoading()">
+      <div class="form-group">
+        <label for="budget">Total Budget (₹) *</label>
+        <input type="number" id="budget" name="budget" required min="500" step="100" placeholder="e.g. 12000" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="occasion">Occasion *</label>
+          <input type="text" id="occasion" name="occasion" required placeholder="e.g. wedding, party, festival, daily" />
+        </div>
+        <div class="form-group">
+          <label for="style">Style</label>
+          <select id="style" name="style">
+            <option value="contemporary">Contemporary</option>
+            <option value="traditional">Traditional</option>
+            <option value="modern">Modern</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="classic">Classic</option>
+            <option value="bohemian">Bohemian</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="metal_preference">Metal Preference</label>
+          <select id="metal_preference" name="metal_preference">
+            <option value="">Any</option>
+            <option value="gold">Gold</option>
+            <option value="silver">Silver</option>
+            <option value="rose_gold">Rose Gold</option>
+            <option value="platinum">Platinum</option>
+            <option value="artificial">Artificial / Fashion</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="platforms">Platforms</label>
+          <input type="text" id="platforms" name="platforms" value="Amazon,Flipkart" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="outfit_image">Outfit Image (optional)</label>
+        <input type="file" id="outfit_image" name="outfit_image" accept="image/*" />
+        <small style="color:var(--text-muted); font-size:0.8rem;">AI will analyse colours & style for matching jewellery</small>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" name="notes" placeholder="e.g. Prefer lightweight, matching earrings needed…"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Get Jewelry Recommendations</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

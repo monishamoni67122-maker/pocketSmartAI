@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} — Smart Budget & Recommendations{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Plan Smart. Spend Wise.</h1>
+  <p>
+    PocketSmart AI uses Gemini 1.5 Flash to deliver personalized, budget-aware
+    recommendations for home interiors, parties, and jewelry — across Amazon,
+    Flipkart, IKEA, Swiggy, Zomato, OYO and more.
+  </p>
+  <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+    <a href="/planner/home" class="btn btn-primary">🏠 Home Planner</a>
+    <a href="/planner/party" class="btn btn-accent">🎉 Party Planner</a>
+    <a href="/planner/jewelry" class="btn btn-secondary">💍 Jewelry Planner</a>
+  </div>
+</section>
+
+<div class="container">
+  <div class="card-grid">
+    <div class="card">
+      <div class="icon">🛋️</div>
+      <h3>Home Interior Planning</h3>
+      <p>
+        Enter your budget, rooms and furniture needs. Get cost-effective
+        options from IKEA, Amazon and Flipkart balanced across style and price.
+      </p>
+      <a href="/planner/home" class="btn btn-primary">Start Planning</a>
+    </div>
+    <div class="card">
+      <div class="icon">🎂</div>
+      <h3>AI Party Budget Planner</h3>
+      <p>
+        Allocate budget across catering, decoration and venue. Sourced from
+        Swiggy, Zomato, OYO and more — tailored to guest count and event type.
+      </p>
+      <a href="/planner/party" class="btn btn-primary">Plan Event</a>
+    </div>
+    <div class="card">
+      <div class="icon">✨</div>
+      <h3>Jewelry Recommendations</h3>
+      <p>
+        Match jewelry to occasion and style. Optionally upload an outfit photo
+        for AI colour-coordinated suggestions within budget.
+      </p>
+      <a href="/planner/jewelry" class="btn btn-primary">Find Jewelry</a>
+    </div>
+  </div>
+
+  <section style="margin-top:4rem; text-align:center;">
+    <h2 style="margin-bottom:1rem;">How it works</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Set Budget</h3>
+        <p>Tell us your total budget and preferences for the category.</p>
+      </div>
+      <div class="card">
+        <h3>2. AI Analysis</h3>
+        <p>Gemini 1.5 Flash interprets needs and allocates budget intelligently.</p>
+      </div>
+      <div class="card">
+        <h3>3. Get Recommendations</h3>
+        <p>Receive curated product & service suggestions with platform links.</p>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

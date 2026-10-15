@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Recommendation History — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 style="margin-bottom:0.5rem;">📜 Recommendation History</h1>
+  <p style="color:var(--text-muted); margin-bottom:2rem;">Your past budget plans and AI suggestions</p>
+
+  {% if history %}
+    {% for item in history %}
+    <div class="history-item">
+      <div style="flex:1;">
+        <span class="type-badge type-{{ item.type }}">{{ item.type }}</span>
+        <strong style="margin-left:0.75rem;">₹{{ "{:,.0f}".format(item.total_budget) }}</strong>
+        {% if item.had_image %}<span style="font-size:0.8rem; color:var(--accent); margin-left:0.5rem;">📷 image used</span>{% endif %}
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.4rem;">
+          {{ item.result_summary }}
+        </p>
+      </div>
+      <small style="color:var(--text-muted); white-space:nowrap;">{{ item.saved_at[:19] if item.saved_at else '' }}</small>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="card">
+      <p style="color:var(--text-muted);">No history yet. Generate recommendations from any planner to see them here.</p>
+      <a href="/" class="btn btn-primary" style="margin-top:1rem;">Go to Planners</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{{ app_name }}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo">💎 PocketSmart AI</a>
+    <div class="nav-links">
+      <a href="/" class="{% if request.url.path == '/' %}active{% endif %}">Home</a>
+      <a href="/planner/home">Home Planner</a>
+      <a href="/planner/party">Party Planner</a>
+      <a href="/planner/jewelry">Jewelry Planner</a>
+      <a href="/testimonials">Testimonials</a>
+      {% if user %}
+        <a href="/dashboard">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/logout" class="btn btn-secondary">Logout</a>
+      {% else %}
+        <a href="/login" class="btn btn-secondary">Login</a>
+        <a href="/register" class="btn btn-primary">Sign Up</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>&copy; 2025 PocketSmart AI — Smart Budget & Recommendation Assistant</p>
+    <p>Powered by Gemini 1.5 Flash · FastAPI</p>
+  </footer>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <p>Generating smart recommendations…</p>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

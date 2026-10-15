@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Recommendations — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="results-header">
+    <h1>
+      {% if planner_type == 'home' %}🏠 Home Interior Recommendations
+      {% elif planner_type == 'party' %}🎉 Party Plan Recommendations
+      {% else %}💍 Jewelry Recommendations
+      {% endif %}
+    </h1>
+    <span class="budget-badge">Budget: ₹{{ "{:,.0f}".format(result.total_budget) }}</span>
+    {% if result.remaining_budget is defined %}
+    <p style="color:var(--text-muted); margin-top:0.5rem;">
+      Estimated remaining: ₹{{ "{:,.0f}".format(result.remaining_budget) }}
+    </p>
+    {% endif %}
+  </div>
+
+  {% if result.is_fallback %}
+  <div class="fallback-banner">
+    ⚠️ Demo / fallback recommendations are shown.
+    Set a valid <code>GEMINI_API_KEY</code> in your <code>.env</code> file for live AI results.
+  </div>
+  {% endif %}
+
+  {% if result.summary %}
+  <div class="card" style="margin-bottom:1.5rem;">
+    <p>{{ result.summary }}</p>
+  </div>
+  {% endif %}
+
+  {% for alloc in result.allocations %}
+  <div class="allocation-card">
+    <h3>
+      {{ alloc.category }}
+      <span class="alloc-meta">
+        ₹{{ "{:,.0f}".format(alloc.allocated_budget) }}
+        ({{ "%.0f"|format(alloc.percentage) }}%)
+      </span>
+    </h3>
+    <div class="product-grid">
+      {% for prod in alloc.recommendations %}
+      <div class="product-card">
+        <span class="platform">{{ prod.platform }}</span>
+        <h4 style="font-size:1rem;">{{ prod.name }}</h4>
+        <div class="price">₹{{ "{:,.0f}".format(prod.estimated_price) }}</div>
+        <p style="font-size:0.9rem;">{{ prod.description }}</p>
+        <p class="why">💡 {{ prod.why_recommended }}</p>
+        {% if prod.product_url %}
+        <a href="{{ prod.product_url }}" target="_blank" rel="noopener" class="btn btn-secondary" style="margin-top:0.75rem; font-size:0.85rem; padding:0.4rem 0.8rem;">
+          View on {{ prod.platform }} →
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="card">
+    <p>No recommendations generated. Please try again with different inputs.</p>
+  </div>
+  {% endfor %}
+
+  {% if result.tips %}
+  <div class="tips-box">
+    <h3>💡 Smart Tips</h3>
+    <ul>
+      {% for tip in result.tips %}
+      <li>{{ tip }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div style="text-align:center; margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+    <a href="/planner/{{ planner_type }}" class="btn btn-primary">Plan Again</a>
+    <a href="/" class="btn btn-secondary">Home</a>
+    {% if user %}
+    <a href="/history" class="btn btn-secondary">View History</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

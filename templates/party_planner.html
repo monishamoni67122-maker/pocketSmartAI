@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Party Budget Planner — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-card">
+    <h2>🎉 Party Budget Planner</h2>
+    <p class="subtitle">Allocate budget for catering, decor, venue & entertainment</p>
+
+    <form method="post" action="/generate-party" onsubmit="showLoading()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="budget">Total Budget (₹) *</label>
+          <input type="number" id="budget" name="budget" required min="1000" step="500" placeholder="e.g. 40000" />
+        </div>
+        <div class="form-group">
+          <label for="guest_count">Guest Count *</label>
+          <input type="number" id="guest_count" name="guest_count" required min="1" max="500" placeholder="e.g. 50" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="event_type">Event Type *</label>
+          <select id="event_type" name="event_type" required>
+            <option value="birthday">Birthday</option>
+            <option value="wedding">Wedding</option>
+            <option value="corporate">Corporate</option>
+            <option value="anniversary">Anniversary</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" value="Mumbai" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="venue_preference">Venue Preference</label>
+        <input type="text" id="venue_preference" name="venue_preference" placeholder="e.g. home, banquet hall, outdoor, OYO" />
+      </div>
+
+      <div class="form-group">
+        <label for="platforms">Preferred Platforms</label>
+        <input type="text" id="platforms" name="platforms" value="Swiggy,Zomato,OYO,Amazon" />
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" name="notes" placeholder="e.g. Vegetarian only, need live music, outdoor seating…"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Generate Party Plan</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

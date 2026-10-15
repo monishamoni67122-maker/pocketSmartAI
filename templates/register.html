@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Register — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-card">
+    <h2>Create Account</h2>
+    <p class="subtitle">Join PocketSmart AI for personalized recommendations</p>
+
+    <div id="reg-error" class="error-msg" style="display:none;"></div>
+    <div id="reg-success" class="success-msg" style="display:none;"></div>
+
+    <form id="register-form">
+      <div class="form-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" placeholder="Your name" />
+      </div>
+      <div class="form-group">
+        <label for="username">Username *</label>
+        <input type="text" id="username" name="username" required minlength="3" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password *</label>
+        <input type="password" id="password" name="password" required minlength="6" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </form>
+    <p style="text-align:center; margin-top:1.25rem; color:var(--text-muted); font-size:0.9rem;">
+      Already have an account? <a href="/login">Login</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const err = document.getElementById('reg-error');
+  const ok = document.getElementById('reg-success');
+  err.style.display = 'none';
+  ok.style.display = 'none';
+
+  const body = {
+    username: document.getElementById('username').value,
+    email: document.getElementById('email').value,
+    password: document.getElementById('password').value,
+    full_name: document.getElementById('full_name').value || null,
+  };
+
+  try {
+    const res = await fetch('/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      err.textContent = data.detail || 'Registration failed';
+      err.style.display = 'block';
+      return;
+    }
+    ok.textContent = 'Registration successful! Redirecting to login…';
+    ok.style.display = 'block';
+    setTimeout(() => window.location.href = '/login', 1500);
+  } catch (ex) {
+    err.textContent = 'Network error. Please try again.';
+    err.style.display = 'block';
+  }
+});
+</script>
+{% endblock %}

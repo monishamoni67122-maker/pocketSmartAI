@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Home Interior Planner — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-card" style="max-width:640px;">
+    <h2>🏠 Home Interior Budget Planner</h2>
+    <p class="subtitle">Get AI-powered furniture & decor suggestions within your budget</p>
+
+    <form method="post" action="/generate-home" id="home-form" onsubmit="showLoading()">
+      <div class="form-group">
+        <label for="budget">Total Budget (₹) *</label>
+        <input type="number" id="budget" name="budget" required min="1000" step="500" placeholder="e.g. 75000" />
+      </div>
+
+      <div class="form-group">
+        <label>Rooms *</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="room_cb" value="living_room" checked /> Living Room</label>
+          <label><input type="checkbox" name="room_cb" value="bedroom" /> Bedroom</label>
+          <label><input type="checkbox" name="room_cb" value="kitchen" /> Kitchen</label>
+          <label><input type="checkbox" name="room_cb" value="dining" /> Dining</label>
+          <label><input type="checkbox" name="room_cb" value="office" /> Office</label>
+        </div>
+        <input type="hidden" name="rooms" id="rooms-input" />
+      </div>
+
+      <div class="form-group">
+        <label>Items needed</label>
+        <div id="items-container">
+          <div class="item-row">
+            <input type="text" placeholder="Category e.g. Sofa" class="item-cat" value="Sofa" />
+            <input type="number" placeholder="Qty" class="item-qty" value="1" min="1" />
+            <select class="item-style">
+              <option value="modern">Modern</option>
+              <option value="traditional">Traditional</option>
+              <option value="minimalist">Minimalist</option>
+              <option value="contemporary">Contemporary</option>
+            </select>
+            <button type="button" onclick="this.parentElement.remove()">✕</button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" style="margin-top:0.5rem;" onclick="addItem()">+ Add Item</button>
+        <input type="hidden" name="items_json" id="items-json" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="style">Overall Style</label>
+          <select id="style" name="style">
+            <option value="modern">Modern</option>
+            <option value="traditional">Traditional</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="bohemian">Bohemian</option>
+            <option value="contemporary">Contemporary</option>
+            <option value="classic">Classic</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="platforms">Platforms</label>
+          <input type="text" id="platforms" name="platforms" value="Amazon,Flipkart,IKEA" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" name="notes" placeholder="e.g. Prefer eco-friendly materials, small space…"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Generate Recommendations</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function addItem() {
+  const container = document.getElementById('items-container');
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Category" class="item-cat" />
+    <input type="number" placeholder="Qty" class="item-qty" value="1" min="1" />
+    <select class="item-style">
+      <option value="modern">Modern</option>
+      <option value="traditional">Traditional</option>
+      <option value="minimalist">Minimalist</option>
+      <option value="contemporary">Contemporary</option>
+    </select>
+    <button type="button" onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(row);
+}
+
+document.getElementById('home-form').addEventListener('submit', function() {
+  // rooms
+  const rooms = [...document.querySelectorAll('input[name="room_cb"]:checked')].map(c => c.value);
+  document.getElementById('rooms-input').value = rooms.join(',');
+
+  // items
+  const items = [];
+  document.querySelectorAll('#items-container .item-row').forEach(row => {
+    const cat = row.querySelector('.item-cat').value.trim();
+    if (!cat) return;
+    items.push({
+      category: cat,
+      quantity: parseInt(row.querySelector('.item-qty').value) || 1,
+      preferred_style: row.querySelector('.item-style').value
+    });
+  });
+  document.getElementById('items-json').value = JSON.stringify(items);
+});
+</script>
+{% endblock %}
